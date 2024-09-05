@@ -1,4 +1,4 @@
-1. BaseUnit (abstract class)
+## BaseUnit (abstract class)
 - ID
 - Type
 - Position (x;y)
@@ -7,36 +7,36 @@
 - Actions priority (vector)
 - Timestamp
 
-Examples
-Warrior : BaseUnit (class)
-Archer : BaseUnit (class)
-...
+Examples:
+* Warrior : BaseUnit (class)
+* Archer : BaseUnit (class)
+* ...
 
-2. UnitCharacteristic (enum):
-    * HP
-    * Strength
-    * Range
-    * Agility
+## UnitCharacteristic (enum):
+- HP
+- Strength
+- Range
+- Agility
 
-3. Action (class)
+## Action (class)
 - Name
 - Characteristics (map)
 
-Examples
-Action "Move"
+Examples:
+* Action "Move"
     * Characteristics:
         * Target point : (1, 2)
 
-Action "Melee Attack":
+* Action "Melee Attack":
     * Characteristics:
         * Radius: 1 
 
-Action "Range Attack":
+* Action "Range Attack":
     * Characteristics: 
         * Radius: 2
         * Range: 10
 
 
-3. Map (class)
+## Map (class)
 - Height
 - Width
