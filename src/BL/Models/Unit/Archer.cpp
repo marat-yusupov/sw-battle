@@ -1,4 +1,4 @@
-#include <BL/Models/BaseUnit/Archer.hpp>
+#include <BL/Models/Unit/Archer.hpp>
 
 namespace sw::bl::models::unit
 {

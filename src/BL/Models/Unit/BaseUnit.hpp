@@ -2,7 +2,7 @@
 #include <vector>
 #include <chrono>
 
-#include <BL/Models/BaseAction.hpp>
+#include <BL/Models/Action/BaseAction.hpp>
 
 namespace sw::bl::models::unit
 {

@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include <BL/Models/Map.hpp>
 
 namespace sw::bl::models
@@ -7,7 +9,7 @@ namespace sw::bl::models
     {
     }
 
-    const UnitList &Map::unitList() const
+    const Map::UnitList &Map::unitList() const
     {
         return _unitList;
     }
@@ -28,7 +30,7 @@ namespace sw::bl::models
 
     void Map::deleteUnit(std::shared_ptr<unit::BaseUnit> const &unit)
     {
-        auto it = std::find(_unitList.begin(), _unitList.end());
+        auto it = std::find(_unitList.begin(), _unitList.end(), unit);
         if (it == _unitList.end())
         {
             return;

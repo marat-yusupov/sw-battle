@@ -1,4 +1,4 @@
-#include <BL/Models/BaseUnit/Base/BaseUnit.hpp>
+#include <BL/Models/Unit/BaseUnit.hpp>
 
 namespace sw::bl::models::unit
 {

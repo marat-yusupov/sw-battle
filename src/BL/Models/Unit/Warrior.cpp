@@ -1,5 +1,5 @@
-#include <BL/Models/BaseAction/BaseAction.hpp>
-#include <BL/Models/BaseUnit/Warrior.hpp>
+#include <BL/Models/Action/BaseAction.hpp>
+#include <BL/Models/Unit/Warrior.hpp>
 
 namespace sw::bl::models::unit
 {
