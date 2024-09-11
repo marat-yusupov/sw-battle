@@ -8,7 +8,7 @@ namespace sw::bl::models::action
     {
     }
 
-    void RangeAttack::start(Map const &map)
+    void RangeAttack::start(int tick, Map const &map)
     {
         // no implementation
     }

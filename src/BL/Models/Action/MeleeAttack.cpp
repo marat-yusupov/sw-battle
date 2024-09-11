@@ -8,7 +8,7 @@ namespace sw::bl::models::action
     {
     }
 
-    void MeleeAttack::start(Map const &map)
+    void MeleeAttack::start(int tick, Map const &map)
     {
         // no implementation
     }

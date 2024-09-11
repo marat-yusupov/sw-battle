@@ -7,13 +7,33 @@ namespace sw::bl::models
     {
     }
 
-    int Map::width() const
+    const UnitList &Map::unitList() const
     {
-        return _width;
+        return _unitList;
     }
 
-    int Map::height() const
+    void Map::addUnit(std::shared_ptr<unit::BaseUnit> const &unit)
     {
-        return _height;
+
+        bool is_taken_position = std::any_of(_unitList.begin(), _unitList.end(), [&](auto const &iterated_unit)
+                                             { return iterated_unit->position == unit->position; });
+
+        if (is_taken_position)
+        {
+            return;
+        }
+
+        _unitList.push_back(unit);
+    }
+
+    void Map::deleteUnit(std::shared_ptr<unit::BaseUnit> const &unit)
+    {
+        auto it = std::find(_unitList.begin(), _unitList.end());
+        if (it == _unitList.end())
+        {
+            return;
+        }
+
+        _unitList.erase(it);
     }
 }

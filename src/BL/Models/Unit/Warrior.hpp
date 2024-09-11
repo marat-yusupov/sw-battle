@@ -11,7 +11,5 @@ namespace sw::bl::models::unit
         Warrior(int id, Type type, std::pair<int, int> const &position,
                 int hp,
                 int strength);
-
-        void executeActions() override;
     };
 }

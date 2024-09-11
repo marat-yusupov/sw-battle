@@ -15,7 +15,5 @@ namespace sw::bl::models::unit
                int strength,
                int range,
                int agility);
-
-        void executeActions() override;
     };
 }

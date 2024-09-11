@@ -2,15 +2,13 @@
 
 namespace sw::bl::models::action
 {
-    class MeleeAttack : public BaseAction
+    class Move : public BaseAction
     {
     private:
-        constexpr static int Radius = 1;
-
-        int _strength;
+        std::pair<int, int> _targetPoint;
 
     public:
-        MeleeAttack(int strength);
+        Move(std::pair<int, int> const &targetPoint);
 
         void start(int tick, Map const &map) override;
     };

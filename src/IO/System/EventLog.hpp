@@ -7,7 +7,16 @@
 namespace sw
 {
 	class EventLog {
+	private:
+		EventLog() = default;
+
 	public:
+		static EventLog &instance()
+		{
+			static EventLog instance;
+			return instance;
+		}
+
 		template <class TEvent>
 		void log(uint64_t tick, TEvent&& event)
 		{

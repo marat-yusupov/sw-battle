@@ -10,6 +10,7 @@ namespace sw::bl::models
     {
         enum Name
         {
+            Move,
             MeleeAttack,
             RangeAttack,
         };
@@ -20,19 +21,13 @@ namespace sw::bl::models
             Name _name;
 
         public:
-            BaseAction(Name name)
-                : _name{name}
-            {
-            }
+            BaseAction(Name name);
 
             virtual ~BaseAction() = default;
 
-            Name name() const
-            {
-                return _name;
-            }
+            virtual void start(int tick, Map const &map) = 0;
 
-            virtual void start(Map const &map) = 0;
+            Name name() const;
         };
     }
 }

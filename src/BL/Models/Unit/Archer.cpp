@@ -10,9 +10,4 @@ namespace sw::bl::models::unit
         : BaseUnit(id, type, position, hp), _strength{strength}, _range{range}, _agility{agility}
     {
     }
-
-    void Archer::executeActions()
-    {
-        // no implementation
-    }
 }
