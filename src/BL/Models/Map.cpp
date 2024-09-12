@@ -2,7 +2,7 @@
 
 namespace sw::bl::models
 {
-    Map::Map(uint32_t width, uint32_t height)
+    Map::Map(int width, int height)
         : width{width}, height{height}
     {
     }
