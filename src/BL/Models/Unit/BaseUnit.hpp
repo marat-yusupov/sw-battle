@@ -1,3 +1,6 @@
+#pragma once
+
+#include <memory>
 #include <utility>
 #include <vector>
 #include <chrono>
@@ -6,22 +9,17 @@
 
 namespace sw::bl::models::unit
 {
-    enum Type
-    {
-        Warrior,
-        Archer
-    };
-
     struct BaseUnit
     {
         int id;
-        Type type;
-        std::pair<int, int> position;
         int hp;
+        std::pair<int, int> position;
         std::chrono::steady_clock::time_point timestamp;
 
-        BaseUnit(int id, Type type, std::pair<int, int> const &position, int hp);
+        BaseUnit(int id, int hp, std::pair<int, int> const &position);
 
         virtual ~BaseUnit() = default;
     };
+
+    using List = std::vector<std::shared_ptr<unit::BaseUnit>>;
 }

@@ -8,8 +8,7 @@ namespace sw::bl::models::unit
         int _strength;
 
     public:
-        Warrior(int id, Type type, std::pair<int, int> const &position,
-                int hp,
+        Warrior(int id, int hp, std::pair<int, int> const &position,
                 int strength);
     };
 }

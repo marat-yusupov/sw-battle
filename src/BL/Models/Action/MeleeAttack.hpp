@@ -10,8 +10,8 @@ namespace sw::bl::models::action
         int _strength;
 
     public:
-        MeleeAttack(int strength);
+        MeleeAttack(int unitId, int strength);
 
-        void start(int tick, Map const &map) override;
+        void start() override;
     };
 }

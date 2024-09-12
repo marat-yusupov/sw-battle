@@ -3,12 +3,12 @@
 
 namespace sw::bl::models::action
 {
-    Move::Move(std::pair<int, int> const &targetPoint)
-        : BaseAction{Name::Move}, _targetPoint{targetPoint}
+    Move::Move(int unitId, std::pair<int, int> const &targetPoint)
+        : BaseAction{unitId}, _targetPoint{targetPoint}
     {
     }
 
-    void Move::start(int tick, Map const &map)
+    void Move::start()
     {
         // no implementation
     }

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <map>
-#include <string>
+#include <memory>
+#include <vector>
 
 namespace sw::bl::models
 {
@@ -10,26 +10,23 @@ namespace sw::bl::models
 
     namespace action
     {
-        enum Name
-        {
-            Move,
-            MeleeAttack,
-            RangeAttack,
-        };
 
         class BaseAction
         {
-        private:
-            Name _name;
+        public:
+            int unitId;
 
         public:
-            BaseAction(Name name);
+            BaseAction(int unitId)
+                : unitId{unitId}
+            {
+            }
 
             virtual ~BaseAction() = default;
 
-            virtual void start(int tick, Map const &map) = 0;
-
-            Name name() const;
+            virtual void start() = 0;
         };
+
+        using List = std::vector<std::shared_ptr<BaseAction>>;
     }
 }

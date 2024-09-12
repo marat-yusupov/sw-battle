@@ -8,8 +8,8 @@ namespace sw::bl::models::action
         std::pair<int, int> _targetPoint;
 
     public:
-        Move(std::pair<int, int> const &targetPoint);
+        Move(int unitId, std::pair<int, int> const &targetPoint);
 
-        void start(int tick, Map const &map) override;
+        void start() override;
     };
 }

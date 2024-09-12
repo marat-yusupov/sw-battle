@@ -3,12 +3,12 @@
 
 namespace sw::bl::models::action
 {
-    MeleeAttack::MeleeAttack(int strength)
-        : BaseAction{Name::MeleeAttack}, _strength{strength}
+    MeleeAttack::MeleeAttack(int unitId, int strength)
+        : BaseAction{unitId}, _strength{strength}
     {
     }
 
-    void MeleeAttack::start(int tick, Map const &map)
+    void MeleeAttack::start()
     {
         // no implementation
     }

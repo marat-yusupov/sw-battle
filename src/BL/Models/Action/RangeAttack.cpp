@@ -3,12 +3,12 @@
 
 namespace sw::bl::models::action
 {
-    RangeAttack::RangeAttack(int agility, int range)
-        : BaseAction{Name::RangeAttack}, _agility{agility}, _range{range}
+    RangeAttack::RangeAttack(int unitId, int agility, int range)
+        : BaseAction{unitId}, _agility{agility}, _range{range}
     {
     }
 
-    void RangeAttack::start(int tick, Map const &map)
+    void RangeAttack::start()
     {
         // no implementation
     }

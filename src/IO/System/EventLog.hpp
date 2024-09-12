@@ -1,8 +1,11 @@
 #pragma once
 
 #include <iostream>
+#include <cstdint>
 #include <typeindex>
 #include <unordered_map>
+
+#include <IO/System/details/PrintFieldVisitor.hpp>
 
 namespace sw
 {

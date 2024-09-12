@@ -11,8 +11,8 @@ namespace sw::bl::models::action
         int _range;
 
     public:
-        RangeAttack(int agility, int range);
+        RangeAttack(int unitId, int agility, int range);
 
-        void start(int tick, Map const &map) override;
+        void start() override;
     };
 }

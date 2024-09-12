@@ -5,13 +5,12 @@ namespace sw::bl::models::unit
     class Archer : public BaseUnit
     {
     private:
-        int _strength; // TODO: зачем этому юниту эта характеристика?
+        int _strength;
         int _range;
         int _agility;
 
     public:
-        Archer(int id, Type type, std::pair<int, int> const &position,
-               int hp,
+        Archer(int id, int hp, std::pair<int, int> const &position,
                int strength,
                int range,
                int agility);

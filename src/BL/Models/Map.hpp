@@ -1,26 +1,14 @@
-#include <map>
-#include <memory>
+#pragma once
 
-#include <BL/Models/Unit/BaseUnit.hpp>
+#include <cstdint>
 
 namespace sw::bl::models
 {
-    class Map
+    struct Map
     {
-        using UnitList = std::vector<std::shared_ptr<unit::BaseUnit>>;
+        uint32_t width{};
+        uint32_t height{};
 
-    private:
-        int _width;
-        int _height;
-        UnitList _unitList;
-
-    public:
-        Map(int width, int height);
-
-        const UnitList &unitList() const;
-
-        void addUnit(std::shared_ptr<unit::BaseUnit> const &unit);
-
-        void deleteUnit(std::shared_ptr<unit::BaseUnit> const &unit);
+        Map(uint32_t width = 0, uint32_t height = 0);
     };
 }
