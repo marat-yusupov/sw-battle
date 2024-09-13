@@ -12,9 +12,15 @@ namespace sw::bl::models
     {
     }
 
-    void Unit::start(int tick, resources::Map const &map)
+    bool Unit::start(int tick, resources::Map const &map)
     {
+        if (!targetPosition)
+        {
+            return true;
+        }
+
         Move(shared_from_this(), targetPosition).start(tick);
+        return false;
     }
 
     UnitList Unit::lookAround(resources::Map const &map, std::pair<double, double> range) const
@@ -41,16 +47,16 @@ namespace sw::bl::models
     {
     }
 
-    void Warrior::start(int tick, resources::Map const &map)
+    bool Warrior::start(int tick, resources::Map const &map)
     {
         auto enemiesAround = lookAround(map);
         if (!enemiesAround.empty())
         {
             MeleeAttack(shared_from_this(), enemiesAround, strength).start(tick);
-            return;
+            return false;
         }
 
-        Unit::start(tick, map);
+        return Unit::start(tick, map);
     }
 
     // Archer
@@ -59,22 +65,22 @@ namespace sw::bl::models
     {
     }
 
-    void Archer::start(int tick, resources::Map const &map)
+    bool Archer::start(int tick, resources::Map const &map)
     {
         auto enemiesAroundInRange = lookAround(map, {2, range});
         if (!enemiesAroundInRange.empty())
         {
             RangeAttack(shared_from_this(), enemiesAroundInRange, range, agility).start(tick);
-            return;
+            return false;
         }
 
         auto enemiesInCellRange = lookAround(map);
         if (!enemiesInCellRange.empty())
         {
             MeleeAttack(shared_from_this(), enemiesInCellRange, strength);
-            return;
+            return false;
         }
 
-        Unit::start(tick, map);
+        return Unit::start(tick, map);
     }
 }

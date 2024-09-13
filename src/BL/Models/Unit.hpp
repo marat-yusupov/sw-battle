@@ -16,7 +16,7 @@ namespace sw::bl::models
 
         virtual ~Unit() = default;
 
-        virtual void start(int tick, resources::Map const &Map);
+        virtual bool start(int tick, resources::Map const &Map);
 
         UnitList lookAround(resources::Map const &Map, std::pair<double, double> range = {0.5, 1.5}) const;
     };
@@ -27,7 +27,7 @@ namespace sw::bl::models
 
         Warrior(int id, int hp, Position const &position, int strength);
 
-        void start(int tick, resources::Map const &Map) override;
+        bool start(int tick, resources::Map const &Map) override;
     };
 
     struct Archer : public Unit
@@ -38,6 +38,6 @@ namespace sw::bl::models
 
         Archer(int id, int hp, Position const &position, int strength, int range, int agility);
 
-        void start(int tick, resources::Map const &Map) override;
+        bool start(int tick, resources::Map const &Map) override;
     };
 }

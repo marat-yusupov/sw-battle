@@ -7,22 +7,6 @@
 
 namespace sw::bl
 {
-    bool Simulator::isAllMarchesIsEnded(models::UnitList const &units)
-    {
-        // clang-format off
-        return std::all_of(units.begin(), units.end(), 
-            [](models::UnitPtr const &unit)
-                {
-                    if(!unit->targetPosition) {
-                        return true;
-                    }
-
-                    return false; 
-                }
-            );
-        // clang-format on
-    }
-
     Simulator &Simulator::instance()
     {
         static Simulator instance;
@@ -48,14 +32,19 @@ namespace sw::bl
                 break;
             }
 
-            if (isAllMarchesIsEnded(units))
-            {
-                break;
-            }
-
+            bool allActionsDone = true;
             for (auto &unit : units)
             {
-                unit->start(tick, map);
+                bool actionResult = unit->start(tick, map);
+                if (!actionResult)
+                {
+                    allActionsDone = actionResult;
+                }
+            }
+
+            if (allActionsDone)
+            {
+                break;
             }
         }
     }
