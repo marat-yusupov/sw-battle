@@ -1,5 +1,8 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <memory>
+
 #include <IO/System/CommandParser.hpp>
 #include <IO/System/PrintDebug.hpp>
 #include <IO/Commands/CreateMap.hpp>
@@ -14,6 +17,10 @@
 #include <IO/Events/UnitMoved.hpp>
 #include <IO/Events/UnitDied.hpp>
 #include <IO/Events/UnitAttacked.hpp>
+
+#include <BL/Simulator.hpp>
+#include <BL/ForwardDeclaration.hpp>
+#include <BL/Commands/Command.hpp>
 
 int main(int argc, char **argv)
 {
@@ -30,70 +37,47 @@ int main(int argc, char **argv)
 		throw std::runtime_error("Error: File not found - " + std::string(argv[1]));
 	}
 
-	// Code for example...
+	bl::commands::CommandList commands;
 
-	std::cout << "Commands:\n";
 	io::CommandParser parser;
 	parser.add<io::CreateMap>(
-			  [](auto command)
+			  [&commands](auto command)
 			  {
-				  printDebug(std::cout, command);
+				  std::vector<int> params{command.width, command.height};
+				  auto createMap = std::make_shared<bl::commands::CreateMap>(params);
+				  commands.push_back(createMap);
 			  })
 		.add<io::SpawnWarrior>(
-			[](auto command)
+			[&commands](auto command)
 			{
-				printDebug(std::cout, command);
+				std::vector<int> params{command.unitId, command.x, command.y, command.hp, command.strength};
+				auto spawnWarrior = std::make_shared<bl::commands::SpawnWarrior>(params);
+				commands.push_back(spawnWarrior);
 			})
 		.add<io::SpawnArcher>(
-			[](auto command)
+			[&commands](auto command)
 			{
-				printDebug(std::cout, command);
+				std::vector<int> params{command.unitId,
+										command.x,
+										command.y,
+										command.hp,
+										command.agility,
+										command.strength,
+										command.range};
+				auto spawnArcher = std::make_shared<bl::commands::SpawnArcher>(params);
+				commands.push_back(spawnArcher);
 			})
 		.add<io::March>(
-			[](auto command)
+			[&commands](auto command)
 			{
-				printDebug(std::cout, command);
+				std::vector<int> params{command.unitId, command.targetX, command.targetY};
+				auto march = std::make_shared<bl::commands::March>(params);
+				commands.push_back(march);
 			});
 
 	parser.parse(file);
 
-	std::cout << "\n\nEvents:\n";
-
-	EventLog eventLog;
-
-	eventLog.log(1, io::MapCreated{10, 10});
-	eventLog.log(1, io::UnitSpawned{1, "Warrior", 0, 0});
-	eventLog.log(1, io::UnitSpawned{2, "Archer", 9, 0});
-	eventLog.log(1, io::MarchStarted{1, 0, 0, 9, 0});
-	eventLog.log(1, io::MarchStarted{2, 9, 0, 0, 0});
-	eventLog.log(1, io::UnitSpawned{3, "Warrior", 0, 9});
-	eventLog.log(1, io::MarchStarted{3, 0, 9, 0, 0});
-
-	eventLog.log(2, io::UnitMoved{1, 1, 0});
-	eventLog.log(2, io::UnitMoved{2, 8, 0});
-	eventLog.log(2, io::UnitMoved{3, 0, 8});
-
-	eventLog.log(3, io::UnitMoved{1, 2, 0});
-	eventLog.log(3, io::UnitMoved{2, 7, 0});
-	eventLog.log(3, io::UnitMoved{3, 0, 7});
-
-	eventLog.log(4, io::UnitMoved{1, 3, 0});
-	eventLog.log(4, io::UnitAttacked{2, 1, 5, 0});
-	eventLog.log(4, io::UnitDied{1});
-	eventLog.log(4, io::UnitMoved{3, 0, 6});
-
-	eventLog.log(5, io::UnitMoved{2, 6, 0});
-	eventLog.log(5, io::UnitMoved{3, 0, 5});
-
-	eventLog.log(6, io::UnitMoved{2, 5, 0});
-	eventLog.log(6, io::UnitMoved{3, 0, 4});
-
-	eventLog.log(7, io::UnitMoved{2, 4, 0});
-	eventLog.log(7, io::UnitAttacked{2, 3, 5, 5});
-	eventLog.log(7, io::UnitMoved{3, 0, 3});
-
-	eventLog.log(8, io::UnitAttacked{2, 3, 5, 0});
-	eventLog.log(8, io::UnitDied{3});
+	bl::Simulator::instance().run(commands);
 
 	return 0;
 }

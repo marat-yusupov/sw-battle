@@ -4,12 +4,24 @@
 #include <typeindex>
 #include <unordered_map>
 
+#include <IO/System/details/PrintFieldVisitor.hpp>
+
 namespace sw
 {
-	class EventLog {
+	class EventLog
+	{
+	private:
+		EventLog() = default;
+
 	public:
+		static EventLog &instance()
+		{
+			static EventLog instance;
+			return instance;
+		}
+
 		template <class TEvent>
-		void log(uint64_t tick, TEvent&& event)
+		void log(int tick, TEvent &&event)
 		{
 			std::cout << "[" << tick << "] " << TEvent::Name << " ";
 			PrintFieldVisitor visitor(std::cout);

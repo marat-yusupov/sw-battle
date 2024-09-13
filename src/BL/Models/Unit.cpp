@@ -7,20 +7,21 @@
 namespace sw::bl::models
 {
     // Unit
-    Unit::Unit(int id, int hp, Position const &position)
-        : id{id}, hp{hp}, position{position}
+    Unit::Unit(int id, int hp, Position const &position, OptPosition const &targetPosition)
+        : id{id}, hp{hp}, position{position}, targetPosition{targetPosition}
     {
     }
 
-    void Unit::start(UnitList &units, Map const &map)
+    void Unit::start(int tick, resources::Map const &map)
     {
-        Move(units, position, map).start();
+        if (targetPosition && targetPosition != position)
+            Move(shared_from_this(), *targetPosition).start(tick);
     }
 
-    UnitList Unit::lookAround(UnitList &units, std::pair<int, int> range) const
+    UnitList Unit::lookAround(resources::Map const &map, std::pair<int, int> range) const
     {
         UnitList enemiesAround;
-        for (auto &unit : units)
+        for (auto &unit : map.units())
         {
             double dx = position.first - unit->position.first;
             double dy = position.second - unit->position.second;
@@ -41,16 +42,16 @@ namespace sw::bl::models
     {
     }
 
-    void Warrior::start(UnitList &units, Map const &map)
+    void Warrior::start(int tick, resources::Map const &map)
     {
-        auto enemiesAround = lookAround(units);
+        auto enemiesAround = lookAround(map);
         if (!enemiesAround.empty())
         {
-            MeleeAttack(enemiesAround, strength).start();
+            MeleeAttack(shared_from_this(), enemiesAround, strength).start(tick);
             return;
         }
 
-        Unit::start(units, map);
+        Unit::start(tick, map);
     }
 
     // Archer
@@ -59,22 +60,22 @@ namespace sw::bl::models
     {
     }
 
-    void Archer::start(UnitList &units, Map const &map)
+    void Archer::start(int tick, resources::Map const &map)
     {
-        auto enemiesAroundInRange = lookAround(units, {2, range});
+        auto enemiesAroundInRange = lookAround(map, {2, range});
         if (!enemiesAroundInRange.empty())
         {
-            RangeAttack(enemiesAroundInRange, range, agility).start();
+            RangeAttack(shared_from_this(), enemiesAroundInRange, range, agility).start(tick);
             return;
         }
 
-        auto enemiesInCellRange = lookAround(units);
+        auto enemiesInCellRange = lookAround(map);
         if (!enemiesInCellRange.empty())
         {
-            MeleeAttack(enemiesInCellRange, strength);
+            MeleeAttack(shared_from_this(), enemiesInCellRange, strength);
             return;
         }
 
-        Unit::start(units, map);
+        Unit::start(tick, map);
     }
 }

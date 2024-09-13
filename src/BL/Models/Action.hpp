@@ -5,44 +5,58 @@ namespace sw::bl::models
     class Action
     {
     public:
-        virtual void start() = 0;
+        virtual void start(int tick) = 0;
     };
 
     class Move : public Action
     {
     private:
-        UnitList &_units;
-        Position &_positionOfMovedUnit;
-        Map const &_map;
+        UnitPtr _movedUnit;
+        Position _targetPosition;
 
     public:
-        Move(UnitList &units, Position &positionOfMovedUnit, Map const &map);
+        Move(UnitPtr const &movedUnit,
+             Position const &targetPosition);
 
-        void start() override;
+        void start(int tick) override;
     };
 
-    class MeleeAttack : public Action
+    class Attack : public Action
+    {
+    protected:
+        UnitPtr attacker;
+
+        virtual UnitPtr selectTarget(UnitList const &targets);
+
+    public:
+        Attack(UnitPtr const &attacker);
+    };
+
+    class MeleeAttack : public Attack
     {
     private:
         UnitList _targets;
         int _strength;
 
     public:
-        MeleeAttack(UnitList const &_targets, int strength);
+        MeleeAttack(UnitPtr const &attacker, UnitList const &_targets, int strength);
 
-        void start() override;
+        void start(int tick) override;
     };
 
-    class RangeAttack : public Action
+    class RangeAttack : public Attack
     {
     private:
         UnitList _targets;
         int _range;
         int _agility;
 
-    public:
-        RangeAttack(UnitList const &_targets, int range, int agility);
+    private:
+        UnitPtr selectTarget(UnitList const &targets) override;
 
-        void start() override;
+    public:
+        RangeAttack(UnitPtr const &attacker, UnitList const &_targets, int range, int agility);
+
+        void start(int tick) override;
     };
 }

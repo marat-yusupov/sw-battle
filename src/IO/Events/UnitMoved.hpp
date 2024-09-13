@@ -1,17 +1,18 @@
-#include <cstdint>
+
 #include <string>
 
 namespace sw::io
 {
-	struct UnitMoved {
-		constexpr static const char* Name = "UNIT_MOVED";
+	struct UnitMoved
+	{
+		constexpr static const char *Name = "UNIT_MOVED";
 
-		uint32_t unitId {};
-		uint32_t x {};
-		uint32_t y {};
+		int unitId{};
+		int x{};
+		int y{};
 
 		template <typename Visitor>
-		void visit(Visitor& visitor)
+		void visit(Visitor &visitor)
 		{
 			visitor.visit("unitId", unitId);
 			visitor.visit("x", x);

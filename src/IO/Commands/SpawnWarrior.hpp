@@ -1,22 +1,21 @@
 #pragma once
 
 #include <iosfwd>
-#include <cstdint>
 
 namespace sw::io
 {
 	struct SpawnWarrior
 	{
-		constexpr static const char* Name = "SPAWN_WARRIOR";
+		constexpr static const char *Name = "SPAWN_WARRIOR";
 
-		uint32_t unitId {};
-		uint32_t x {};
-		uint32_t y {};
-		uint32_t hp {};
-		uint32_t strength {};
+		int unitId{};
+		int x{};
+		int y{};
+		int hp{};
+		int strength{};
 
 		template <typename Visitor>
-		void visit(Visitor& visitor)
+		void visit(Visitor &visitor)
 		{
 			visitor.visit("unitId", unitId);
 			visitor.visit("x", x);

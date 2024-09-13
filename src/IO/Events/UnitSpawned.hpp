@@ -1,18 +1,19 @@
-#include <cstdint>
+
 #include <string>
 
 namespace sw::io
 {
-	struct UnitSpawned {
-		constexpr static const char* Name = "UNIT_SPAWNED";
+	struct UnitSpawned
+	{
+		constexpr static const char *Name = "UNIT_SPAWNED";
 
-		uint32_t unitId {};
-		std::string unitType {};
-		uint32_t x {};
-		uint32_t y {};
+		int unitId{};
+		std::string unitType{};
+		int x{};
+		int y{};
 
 		template <typename Visitor>
-		void visit(Visitor& visitor)
+		void visit(Visitor &visitor)
 		{
 			visitor.visit("unitId", unitId);
 			visitor.visit("unitType", unitType);

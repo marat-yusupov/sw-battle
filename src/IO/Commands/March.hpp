@@ -1,20 +1,19 @@
 #pragma once
 
 #include <iosfwd>
-#include <cstdint>
 
 namespace sw::io
 {
 	struct March
 	{
-		constexpr static const char* Name = "MARCH";
+		constexpr static const char *Name = "MARCH";
 
-		uint32_t unitId {};
-		uint32_t targetX {};
-		uint32_t targetY {};
+		int unitId{};
+		int targetX{};
+		int targetY{};
 
 		template <typename Visitor>
-		void visit(Visitor& visitor)
+		void visit(Visitor &visitor)
 		{
 			visitor.visit("unitId", unitId);
 			visitor.visit("targetX", targetX);

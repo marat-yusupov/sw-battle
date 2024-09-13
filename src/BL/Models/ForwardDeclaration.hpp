@@ -9,7 +9,8 @@ namespace sw::bl::models
     using UnitList = std::vector<UnitPtr>;
 
     class Action;
+    using ActionList = std::vector<std::shared_ptr<Action>>;
 
-    struct Map;
     using Position = std::pair<int, int>;
+    using OptPosition = std::optional<Position>;
 }

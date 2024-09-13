@@ -1,22 +1,24 @@
 #include <list>
 
 #include <BL/Models/ForwardDeclaration.hpp>
+#include <BL/Resources/Map.hpp>
 
 namespace sw::bl::models
 {
-    struct Unit
+    struct Unit : public std::enable_shared_from_this<Unit>
     {
         int id;
         int hp;
         Position position;
+        OptPosition targetPosition;
 
-        Unit(int id, int hp, Position const &position);
+        Unit(int id, int hp, Position const &position, OptPosition const &targetPosition = std::nullopt);
 
         virtual ~Unit() = default;
 
-        virtual void start(UnitList &units, Map const &map);
+        virtual void start(int tick, resources::Map const &Map);
 
-        UnitList lookAround(UnitList &units, std::pair<int, int> range = {0, 1}) const;
+        UnitList lookAround(resources::Map const &Map, std::pair<int, int> range = {0, 1}) const;
     };
 
     struct Warrior : public Unit
@@ -25,7 +27,7 @@ namespace sw::bl::models
 
         Warrior(int id, int hp, Position const &position, int strength);
 
-        void start(UnitList &units, Map const &map) override;
+        void start(int tick, resources::Map const &Map) override;
     };
 
     struct Archer : public Unit
@@ -36,6 +38,6 @@ namespace sw::bl::models
 
         Archer(int id, int hp, Position const &position, int strength, int range, int agility);
 
-        void start(UnitList &units, Map const &map) override;
+        void start(int tick, resources::Map const &Map) override;
     };
 }

@@ -1,36 +1,43 @@
 #include <BL/Simulator.hpp>
+#include <BL/Models/Unit.hpp>
+#include <BL/Commands/Command.hpp>
+#include <BL/Resources/Map.hpp>
 
-#include <IO/System/CommandParser.hpp>
-#include <IO/System/PrintDebug.hpp>
-#include <IO/Commands/CreateMap.hpp>
-#include <IO/Commands/SpawnWarrior.hpp>
-#include <IO/Commands/SpawnArcher.hpp>
-#include <IO/Commands/March.hpp>
+#include <iostream>
 
 namespace sw::bl
 {
-    void Simulator::run()
+    Simulator &Simulator::instance()
     {
-        io::CommandParser parser;
-        parser.add<io::CreateMap>(
-                  [](auto command)
-                  {
-                      printDebug(std::cout, command);
-                  })
-            .add<io::SpawnWarrior>(
-                [](auto command)
+        static Simulator instance;
+        return instance;
+    }
+
+    void Simulator::run(commands::CommandList const &commands)
+    {
+        for (int tick = 1;; tick++)
+        {
+            if (tick == 1)
+            {
+                for (auto const &command : commands)
                 {
-                    printDebug(std::cout, command);
-                })
-            .add<io::SpawnArcher>(
-                [](auto command)
-                {
-                    printDebug(std::cout, command);
-                })
-            .add<io::March>(
-                [](auto command)
-                {
-                    printDebug(std::cout, command);
-                });
+                    command->execute(tick);
+                }
+                continue;
+            }
+
+            auto const &map = resources::Map::instance();
+            auto units = map.units();
+
+            if (units.size() < 2)
+            {
+                break;
+            }
+
+            for (auto &unit : units)
+            {
+                unit->start(tick, map);
+            }
+        }
     }
 }

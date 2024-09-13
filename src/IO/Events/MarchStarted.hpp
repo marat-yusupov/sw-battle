@@ -1,18 +1,17 @@
-#include <cstdint>
-
 namespace sw::io
 {
-	struct MarchStarted {
-		constexpr static const char* Name = "MARCH_STARTED";
+	struct MarchStarted
+	{
+		constexpr static const char *Name = "MARCH_STARTED";
 
-		uint32_t unitId {};
-		uint32_t x {};
-		uint32_t y {};
-		uint32_t targetX {};
-		uint32_t targetY {};
+		int unitId{};
+		int x{};
+		int y{};
+		int targetX{};
+		int targetY{};
 
 		template <typename Visitor>
-		void visit(Visitor& visitor)
+		void visit(Visitor &visitor)
 		{
 			visitor.visit("unitId", unitId);
 			visitor.visit("x", x);
