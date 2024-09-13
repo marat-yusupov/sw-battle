@@ -9,6 +9,8 @@ namespace sw::bl
     private:
         Simulator() = default;
 
+        bool isAllMarchesIsEnded(models::UnitList const &units);
+
     public:
         static Simulator &instance();
 

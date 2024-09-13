@@ -18,7 +18,7 @@ namespace sw::bl::models
 
         virtual void start(int tick, resources::Map const &Map);
 
-        UnitList lookAround(resources::Map const &Map, std::pair<int, int> range = {0, 1}) const;
+        UnitList lookAround(resources::Map const &Map, std::pair<double, double> range = {0.5, 1.5}) const;
     };
 
     struct Warrior : public Unit

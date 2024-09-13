@@ -16,7 +16,7 @@ namespace sw::bl::resources
     {
         if (_isInitialize)
         {
-            return;
+            throw std::runtime_error{"Error: Attempt to create map if there is an existing"};
         }
 
         _width = width;
@@ -29,6 +29,19 @@ namespace sw::bl::resources
         if (unit->position.first > _width || unit->position.second > _height)
         {
             throw std::runtime_error{"Error: Attempt to place a unit outside the map"};
+        }
+
+        for (auto const &existUnit : _units)
+        {
+            if (unit->id == existUnit->id)
+            {
+                throw std::runtime_error{"Error: Attempt to add an existing unit"};
+            }
+
+            if (unit->position == existUnit->position)
+            {
+                throw std::runtime_error{"Error: Attempt to add a unit to an occupied position"};
+            }
         }
 
         _units.push_back(unit);

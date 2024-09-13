@@ -13,32 +13,54 @@
 namespace sw::bl::models
 {
     // Move
+    int Move::calculateAxisStep(int targetCoordinate, int currentCoordinate) const
+    {
+        constexpr static int STEP_FORWARD = 1;
+        constexpr static int STEP_BACK = -1;
+        constexpr static int DONT_MOVE = 0;
+
+        int direction = targetCoordinate - currentCoordinate;
+
+        if (direction > 0)
+        {
+            return STEP_FORWARD;
+        }
+
+        if (direction == 0)
+        {
+            return DONT_MOVE;
+        }
+
+        return STEP_BACK;
+    }
+
     Move::Move(UnitPtr const &movedUnit,
-               Position const &targetPosition)
+               OptPosition &targetPosition)
         : _movedUnit{movedUnit}, _targetPosition{targetPosition}
     {
     }
 
     void Move::start(int tick)
     {
-        // TODO: предусмотреть, что могут быть занятые другими юнитами клетки
-        if (_targetPosition == _movedUnit->position)
+        if (!_targetPosition)
         {
-            EventLog::instance().log(tick, io::MarchEnded(_movedUnit->id,
-                                                          _movedUnit->position.first,
-                                                          _movedUnit->position.second));
             return;
         }
 
-        int dx = _targetPosition.first - _movedUnit->position.first;
-        int dy = _targetPosition.second - _movedUnit->position.second;
-
-        _movedUnit->position.first += dx > 0 ? 1 : (dx == 0 ? 0 : -1);
-        _movedUnit->position.second += dy > 0 ? 1 : (dy == 0 ? 0 : -1);
+        _movedUnit->position.first += calculateAxisStep(_targetPosition->first, _movedUnit->position.first);
+        _movedUnit->position.second += calculateAxisStep(_targetPosition->second, _movedUnit->position.second);
 
         EventLog::instance().log(tick, io::UnitMoved(_movedUnit->id,
                                                      _movedUnit->position.first,
                                                      _movedUnit->position.second));
+
+        if (_targetPosition == _movedUnit->position)
+        {
+            _targetPosition = std::nullopt;
+            EventLog::instance().log(tick, io::MarchEnded(_movedUnit->id,
+                                                          _movedUnit->position.first,
+                                                          _movedUnit->position.second));
+        }
     }
 
     // Attack
@@ -75,17 +97,18 @@ namespace sw::bl::models
         auto target = selectTarget(_targets);
         target->hp -= _strength;
 
+        EventLog::instance().log(tick, io::UnitAttacked(attacker->id,
+                                                        target->id,
+                                                        _strength,
+                                                        target->hp < 0
+                                                            ? 0
+                                                            : target->hp));
+
         if (target->hp <= 0)
         {
             resources::Map::instance().deleteUnit(target);
             EventLog::instance().log(tick, io::UnitDied(target->id));
-            return;
         }
-
-        EventLog::instance().log(tick, io::UnitAttacked(attacker->id,
-                                                        target->id,
-                                                        _strength,
-                                                        target->hp));
     }
 
     // RangeAttack
@@ -105,7 +128,6 @@ namespace sw::bl::models
                     return dist_lhs < dist_rhs;
                 }
 
-                // TODO: дублирование... не хорошо, надо бы почистить
                 if (lhs->hp != rhs->hp) {
                     return lhs->hp < rhs->hp;
                 }
@@ -128,16 +150,17 @@ namespace sw::bl::models
         auto target = selectTarget(_targets);
         target->hp -= _agility;
 
+        EventLog::instance().log(tick, io::UnitAttacked(attacker->id,
+                                                        target->id,
+                                                        _agility,
+                                                        target->hp < 0
+                                                            ? 0
+                                                            : target->hp));
+
         if (target->hp <= 0)
         {
             resources::Map::instance().deleteUnit(target);
             EventLog::instance().log(tick, io::UnitDied(target->id));
-            return;
         }
-
-        EventLog::instance().log(tick, io::UnitAttacked(attacker->id,
-                                                        target->id,
-                                                        _agility,
-                                                        target->hp));
     }
 }

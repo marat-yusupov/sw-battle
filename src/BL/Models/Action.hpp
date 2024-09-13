@@ -12,11 +12,14 @@ namespace sw::bl::models
     {
     private:
         UnitPtr _movedUnit;
-        Position _targetPosition;
+        OptPosition &_targetPosition;
+
+    private:
+        int calculateAxisStep(int targetCoordinate, int currentCoordinate) const;
 
     public:
         Move(UnitPtr const &movedUnit,
-             Position const &targetPosition);
+             OptPosition &targetPosition);
 
         void start(int tick) override;
     };

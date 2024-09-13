@@ -14,11 +14,10 @@ namespace sw::bl::models
 
     void Unit::start(int tick, resources::Map const &map)
     {
-        if (targetPosition && targetPosition != position)
-            Move(shared_from_this(), *targetPosition).start(tick);
+        Move(shared_from_this(), targetPosition).start(tick);
     }
 
-    UnitList Unit::lookAround(resources::Map const &map, std::pair<int, int> range) const
+    UnitList Unit::lookAround(resources::Map const &map, std::pair<double, double> range) const
     {
         UnitList enemiesAround;
         for (auto &unit : map.units())
