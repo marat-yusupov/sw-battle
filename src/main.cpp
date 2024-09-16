@@ -22,10 +22,55 @@
 #include <BL/ForwardDeclaration.hpp>
 #include <BL/Commands/Command.hpp>
 
+using namespace sw;
+
+bl::commands::CommandList parseArgs(std::ifstream &file)
+{
+	bl::commands::CommandList result;
+
+	io::CommandParser parser;
+	parser.add<io::CreateMap>(
+			  [&result](auto command)
+			  {
+				  std::vector<int> params{command.width, command.height};
+				  auto createMap = std::make_shared<bl::commands::CreateMap>(params);
+				  result.push_back(createMap);
+			  })
+		.add<io::SpawnWarrior>(
+			[&result](auto command)
+			{
+				std::vector<int> params{command.unitId, command.x, command.y, command.hp, command.strength};
+				auto spawnWarrior = std::make_shared<bl::commands::SpawnWarrior>(params);
+				result.push_back(spawnWarrior);
+			})
+		.add<io::SpawnArcher>(
+			[&result](auto command)
+			{
+				std::vector<int> params{command.unitId,
+										command.x,
+										command.y,
+										command.hp,
+										command.agility,
+										command.strength,
+										command.range};
+				auto spawnArcher = std::make_shared<bl::commands::SpawnArcher>(params);
+				result.push_back(spawnArcher);
+			})
+		.add<io::March>(
+			[&result](auto command)
+			{
+				std::vector<int> params{command.unitId, command.targetX, command.targetY};
+				auto march = std::make_shared<bl::commands::March>(params);
+				result.push_back(march);
+			});
+
+	parser.parse(file);
+
+	return result;
+}
+
 int main(int argc, char **argv)
 {
-	using namespace sw;
-
 	if (argc != 2)
 	{
 		throw std::runtime_error("Error: No file specified in command line argument");
@@ -37,46 +82,7 @@ int main(int argc, char **argv)
 		throw std::runtime_error("Error: File not found - " + std::string(argv[1]));
 	}
 
-	bl::commands::CommandList commands;
-
-	io::CommandParser parser;
-	parser.add<io::CreateMap>(
-			  [&commands](auto command)
-			  {
-				  std::vector<int> params{command.width, command.height};
-				  auto createMap = std::make_shared<bl::commands::CreateMap>(params);
-				  commands.push_back(createMap);
-			  })
-		.add<io::SpawnWarrior>(
-			[&commands](auto command)
-			{
-				std::vector<int> params{command.unitId, command.x, command.y, command.hp, command.strength};
-				auto spawnWarrior = std::make_shared<bl::commands::SpawnWarrior>(params);
-				commands.push_back(spawnWarrior);
-			})
-		.add<io::SpawnArcher>(
-			[&commands](auto command)
-			{
-				std::vector<int> params{command.unitId,
-										command.x,
-										command.y,
-										command.hp,
-										command.agility,
-										command.strength,
-										command.range};
-				auto spawnArcher = std::make_shared<bl::commands::SpawnArcher>(params);
-				commands.push_back(spawnArcher);
-			})
-		.add<io::March>(
-			[&commands](auto command)
-			{
-				std::vector<int> params{command.unitId, command.targetX, command.targetY};
-				auto march = std::make_shared<bl::commands::March>(params);
-				commands.push_back(march);
-			});
-
-	parser.parse(file);
-
+	auto commands = parseArgs(file);
 	bl::Simulator::instance().run(commands);
 
 	return 0;
