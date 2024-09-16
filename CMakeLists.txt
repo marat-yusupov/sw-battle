@@ -7,3 +7,9 @@ file(GLOB_RECURSE SOURCES src/*.cpp src/*.hpp)
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
+
+option(WITH_TESTS "WITH_TESTS" OFF)
+
+if(WITH_TESTS)
+    add_subdirectory(tests)
+endif()
